@@ -1,0 +1,44 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+repositories {
+  jcenter()
+  mavenCentral()
+}
+
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath "io.spring.gradle:dependency-management-plugin:1.0.3.RELEASE"
+  }
+}
+
+apply plugin: "io.spring.dependency-management"
+
+dependencyManagement {
+  imports {
+    mavenBom 'com.amazonaws:aws-java-sdk-bom:1.11.330'
+  }
+}
+
+dependencies {
+  compile 'com.amazonaws:aws-java-sdk-s3'
+      // Use JUnit Jupiter API for testing.
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.2'
+
+    // Use JUnit Jupiter Engine for testing.
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+
+    // This dependency is used by the application.
+    implementation 'com.google.guava:guava:29.0-jre'
+}
+
+run {
+  if (project.hasProperty("appArgs")) {
+    args Eval.me(appArgs)
+  }
+}
+
+mainClassName = 'App'
